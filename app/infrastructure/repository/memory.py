@@ -1,6 +1,4 @@
-from abc import abstractmethod
 from dataclasses import dataclass, field
-from typing import List
 from domain.entities.batch import Batch
 from infrastructure.repository.base import BaseRepository
 
