@@ -10,5 +10,5 @@ class BaseRepository(ABC):
         ...
     
     @abstractmethod
-    def get_batch(self, reference) -> Batch:
+    def get_batch(self, reference: str) -> Batch:
         ...

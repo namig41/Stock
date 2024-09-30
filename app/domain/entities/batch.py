@@ -10,8 +10,8 @@ class Batch:
     oid: str = field(default_factory=lambda: str(uuid4), kw_only=True)
     reference: str
     sku: str
-    eta: date = field(default_factory=date.today(), kw_only=True)
-    _purchased_quantity: int = field(default_factory=0)
+    eta: date = field(default_factory=date.today, kw_only=True)
+    _purchased_quantity: int = field(default=0)
     _allocations: set[OrderLine] = field(default_factory=set[OrderLine])
     
     def __hash__(self) -> int:

@@ -1,15 +1,7 @@
-
 from domain.entities.batch import Batch
 
 
 def convert_batch_data(batch_data: dict) -> Batch:
-    
-    # return Batch(
-    #     reference=batch_data['reference'],
-    #     sku=batch_data['sku'],
-    #     eta=batch_data['eta'],
-    #     _purchased_quantity=batch_data['_purchased_quantity']
-    # )
     
     return Batch(
         reference=batch_data[0],
@@ -17,3 +9,5 @@ def convert_batch_data(batch_data: dict) -> Batch:
         eta=batch_data[2],
         _purchased_quantity=batch_data[3]
     )
+    
+    
