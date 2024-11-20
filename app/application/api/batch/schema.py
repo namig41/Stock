@@ -4,17 +4,17 @@ from pydantic import BaseModel
 from domain.entities.batch import Batch
 
 
-class GetBatchRequestScheme(BaseModel):
+class GetBatchRequestSchema(BaseModel):
     reference: str
     
     
-class GetBatchResponseScheme(BaseModel):
+class GetBatchResponseSchema(BaseModel):
     reference: str
     sku: str
         
     @classmethod
-    def from_entiry(cls, batch: Batch) -> 'GetBatchResponseScheme':
-        return GetBatchResponseScheme(
+    def from_entiry(cls, batch: Batch) -> 'GetBatchResponseSchema':
+        return cls(
             reference=batch.reference,
             sku=batch.sku,
         )
@@ -23,13 +23,13 @@ class CreateBatchRequestSchema(BaseModel):
     reference: str
     sku: str
 
-class CreateBatchResponseScheme(BaseModel):
+class CreateBatchResponseSchema(BaseModel):
     reference: str
     sku: str
         
     @classmethod
-    def from_entiry(cls, batch: Batch) -> 'CreateBatchResponseScheme':
-        return CreateBatchResponseScheme(
+    def from_entiry(cls, batch: Batch) -> 'CreateBatchResponseSchema':
+        return cls(
             reference=batch.reference,
             sku=batch.sku
         )

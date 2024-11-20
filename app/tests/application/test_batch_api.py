@@ -2,7 +2,7 @@ from datetime import date
 import requests 
 import pytest
 
-from application.api.batch.scheme import CreateBatchResponseScheme
+from application.api.batch.schema import CreateBatchResponseSchema
 from domain.entities.batch import Batch
 
 

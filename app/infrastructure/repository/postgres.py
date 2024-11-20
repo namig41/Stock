@@ -7,5 +7,5 @@ class PostgresBatchRepository(BaseRepository):
     def add_batch(self, batch: Batch):
         ...
     
-    def get_batch(self, reference) -> Batch:
+    def get_batch(self, reference: str) -> Batch:
         ...
