@@ -12,7 +12,7 @@ class GetBatchResponseSchema(BaseModel):
     sku: str
 
     @classmethod
-    def from_entiry(cls, batch: Batch) -> "GetBatchResponseSchema":
+    def from_entity(cls, batch: Batch) -> "GetBatchResponseSchema":
         return cls(
             reference=batch.reference,
             sku=batch.sku,
@@ -29,7 +29,7 @@ class CreateBatchResponseSchema(BaseModel):
     sku: str
 
     @classmethod
-    def from_entiry(cls, batch: Batch) -> "CreateBatchResponseSchema":
+    def from_entity(cls, batch: Batch) -> "CreateBatchResponseSchema":
         return cls(
             reference=batch.reference,
             sku=batch.sku,

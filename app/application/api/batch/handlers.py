@@ -34,13 +34,13 @@ def get_batch_by_reference(
     repository: BaseRepository = Depends(init_repository),
 ):
     try:
-        batch = repository.get_batch(reference=reference)
+        batch: Batch = repository.get_batch(reference=reference)
     except ApplicationException as exception:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail={"error": exception.message},
         )
 
-    return GetBatchResponseSchema.from_entiry(batch)
+    return GetBatchResponseSchema.from_entity(batch)
 
 
 @router.post(
@@ -55,10 +55,10 @@ def post_batch(
 ):
     try:
         repository.add_batch(Batch(reference=schema.reference, sku=schema.sku))
-        batch = repository.get_batch(reference=schema.reference)
+        batch: Batch = repository.get_batch(reference=schema.reference)
     except ApplicationException as exception:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail={"error": exception.message},
         )
 
-    return CreateBatchResponseSchema.from_entiry(batch)
+    return CreateBatchResponseSchema.from_entity(batch)
