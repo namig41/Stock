@@ -1,4 +1,7 @@
-from dataclasses import dataclass, field
+from dataclasses import (
+    dataclass,
+    field,
+)
 from datetime import date
 from uuid import uuid4
 
@@ -8,17 +11,19 @@ from domain.value_objects.order_line import OrderLine
 @dataclass
 class Batch:
     oid: str = field(default_factory=lambda: str(uuid4), kw_only=True)
-    reference: str
-    sku: str
+    reference: str = ""
+    sku: str = ""
     eta: date = field(default_factory=date.today, kw_only=True)
     _purchased_quantity: int = field(default=0)
     _allocations: set[OrderLine] = field(default_factory=set[OrderLine])
-    
+
     def __hash__(self) -> int:
         return hash(self.oid)
 
-    def __eq__(self, __value: 'Batch') -> bool:
-        return self.oid == __value.oid
+    def __eq__(self, batch: object) -> bool:
+        if isinstance(batch, Batch):
+            return self.oid == batch.oid
+        return False
 
     def allocate(self, line: OrderLine):
         if self.can_allocate(line):

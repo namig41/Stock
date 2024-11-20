@@ -1,4 +1,5 @@
 from typing import List
+
 from domain.entities.batch import Batch
 from domain.value_objects.order_line import OrderLine
 

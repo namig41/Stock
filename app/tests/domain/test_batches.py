@@ -1,5 +1,4 @@
 from datetime import date
-import pytest
 
 from domain.entities.batch import Batch
 from domain.value_objects.order_line import OrderLine

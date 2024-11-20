@@ -7,4 +7,4 @@ from infrastructure.exceptions.base import InfrastuctureException
 class BatchNotFoundInDataBase(InfrastuctureException):
     @property
     def message(self):
-        return 'Продукт не найден в базе данных'
+        return "Продукт не найден в базе данных"

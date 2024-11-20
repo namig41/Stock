@@ -1,9 +1,7 @@
 import datetime
 from datetime import date
-from pytest import fixture
 
-from domain.entities.batch import Batch
-from domain.value_objects.order_line import OrderLine
+from pytest import fixture
 
 
 @fixture

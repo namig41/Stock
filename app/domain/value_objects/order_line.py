@@ -5,4 +5,4 @@ from dataclasses import dataclass
 class OrderLine:
     ordrid: str
     sku: str
-    qty: str
+    qty: int

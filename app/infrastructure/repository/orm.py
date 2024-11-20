@@ -1,5 +1,16 @@
-from sqlalchemy import Table, MetaData, Column, Integer, String, Date, ForeignKey
-from sqlalchemy.orm import mapper, relationship
+from sqlalchemy import (
+    Column,
+    Date,
+    ForeignKey,
+    Integer,
+    MetaData,
+    String,
+    Table,
+)
+from sqlalchemy.orm import (
+    mapper,
+    relationship,
+)
 
 from domain.entities.batch import Batch
 from domain.value_objects.order_line import OrderLine
@@ -42,8 +53,9 @@ def start_mappers():
         batches,
         properties={
             "_allocations": relationship(
-                lines_mapper, secondary=allocations, collection_class=set,
-            )
+                lines_mapper,
+                secondary=allocations,
+                collection_class=set,
+            ),
         },
     )
-    
