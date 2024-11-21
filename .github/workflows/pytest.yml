@@ -33,4 +33,11 @@ jobs:
 
       # Шаг 5: Запуск тестов
       - name: Run pytest
+        env:
+          PYTHONPATH: ./app
+          API_PORT: "8000"
+          DB_USER: namig
+          DB_PASSWORD: 12345678
+          DB_ADDRESS: localhost
+          DB_NAME: stock
         run: poetry run pytest
