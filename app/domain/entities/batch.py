@@ -10,7 +10,7 @@ from domain.value_objects.order_line import OrderLine
 
 @dataclass
 class Batch:
-    oid: str = field(default_factory=lambda: str(uuid4), kw_only=True)
+    oid: str = field(default_factory=lambda: str(uuid4()), kw_only=True)
     reference: str = ""
     sku: str = ""
     eta: date = field(default_factory=date.today, kw_only=True)

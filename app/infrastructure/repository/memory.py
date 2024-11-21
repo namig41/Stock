@@ -29,3 +29,6 @@ class MemoryBatchRepository(BaseBatchRepository):
             )
         except StopIteration:
             raise BatchNotFoundInDataBase()
+
+    def __len__(self):
+        return len(self._saved_batches)

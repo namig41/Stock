@@ -22,7 +22,7 @@ from domain.entities.batch import Batch
 
 
 router = APIRouter(
-    prefix="/batch",
+    prefix="/batches",
     tags=["Batch"],
 )
 
@@ -35,7 +35,7 @@ router = APIRouter(
 )
 def get_batches(
     container: Container = Depends(init_container),
-):
+) -> GetBatchesResponseSchema:
     try:
         batch_repository: BaseBatchRepository = container.resolve(BaseBatchRepository)
         batches: Iterable[Batch] = batch_repository.get_batches()
@@ -56,7 +56,7 @@ def get_batches(
 def get_batch_by_reference(
     reference: str,
     container: Container = Depends(init_container),
-):
+) -> GetBatchResponseSchema:
     try:
         batch_repository: BaseBatchRepository = container.resolve(BaseBatchRepository)
         batch: Batch = batch_repository.get_batch(reference=reference)
@@ -77,7 +77,7 @@ def get_batch_by_reference(
 def post_batch(
     schema: CreateBatchRequestSchema,
     container: Container = Depends(init_container),
-):
+) -> CreateBatchResponseSchema:
     try:
         batch_repository: BaseBatchRepository = container.resolve(BaseBatchRepository)
         batch_repository.add_batch(Batch(reference=schema.reference, sku=schema.sku))
