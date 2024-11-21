@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from pydantic import BaseModel
 
 from domain.entities.batch import Batch
@@ -16,6 +18,16 @@ class GetBatchResponseSchema(BaseModel):
         return cls(
             reference=batch.reference,
             sku=batch.sku,
+        )
+
+
+class GetBatchesResponseSchema(BaseModel):
+    batches: Iterable[GetBatchResponseSchema]
+
+    @classmethod
+    def from_entity(cls, batches: Iterable[Batch]) -> "GetBatchesResponseSchema":
+        return cls(
+            batches=[GetBatchResponseSchema.from_entity(batch) for batch in batches],
         )
 
 

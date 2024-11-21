@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from fastapi import (
     APIRouter,
     Depends,
@@ -5,12 +7,14 @@ from fastapi import (
     status,
 )
 
-from infrastructure.repository.base import BaseRepository
-from infrastructure.repository.init import init_repository
+from infrastructure.container.init import init_container
+from infrastructure.repository.base import BaseBatchRepository
+from punq import Container
 
 from application.api.batch.schema import (
     CreateBatchRequestSchema,
     CreateBatchResponseSchema,
+    GetBatchesResponseSchema,
     GetBatchResponseSchema,
 )
 from application.exceptions.base import ApplicationException
@@ -24,6 +28,26 @@ router = APIRouter(
 
 
 @router.get(
+    "/",
+    response_model=GetBatchesResponseSchema,
+    status_code=status.HTTP_200_OK,
+    description="Эндпоинт для получения всех продуктов",
+)
+def get_batches(
+    container: Container = Depends(init_container),
+):
+    try:
+        batch_repository: BaseBatchRepository = container.resolve(BaseBatchRepository)
+        batches: Iterable[Batch] = batch_repository.get_batches()
+    except ApplicationException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
+        )
+    return GetBatchesResponseSchema.from_entity(batches)
+
+
+@router.get(
     "/{reference}",
     response_model=GetBatchResponseSchema,
     status_code=status.HTTP_200_OK,
@@ -31,15 +55,16 @@ router = APIRouter(
 )
 def get_batch_by_reference(
     reference: str,
-    repository: BaseRepository = Depends(init_repository),
+    container: Container = Depends(init_container),
 ):
     try:
-        batch: Batch = repository.get_batch(reference=reference)
+        batch_repository: BaseBatchRepository = container.resolve(BaseBatchRepository)
+        batch: Batch = batch_repository.get_batch(reference=reference)
     except ApplicationException as exception:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail={"error": exception.message},
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
         )
-
     return GetBatchResponseSchema.from_entity(batch)
 
 
@@ -51,14 +76,16 @@ def get_batch_by_reference(
 )
 def post_batch(
     schema: CreateBatchRequestSchema,
-    repository: BaseRepository = Depends(init_repository),
+    container: Container = Depends(init_container),
 ):
     try:
-        repository.add_batch(Batch(reference=schema.reference, sku=schema.sku))
-        batch: Batch = repository.get_batch(reference=schema.reference)
+        batch_repository: BaseBatchRepository = container.resolve(BaseBatchRepository)
+        batch_repository.add_batch(Batch(reference=schema.reference, sku=schema.sku))
+        batch: Batch = batch_repository.get_batch(reference=schema.reference)
     except ApplicationException as exception:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail={"error": exception.message},
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
         )
 
     return CreateBatchResponseSchema.from_entity(batch)

@@ -1,3 +1,4 @@
+from infrastructure.database.init import engine
 from sqlalchemy import (
     Column,
     Date,
@@ -59,3 +60,9 @@ def start_mappers():
             ),
         },
     )
+
+
+metadata.create_all(engine)
+
+# Опционально: вызов мапперов (если нужно использовать ORM)
+start_mappers()
