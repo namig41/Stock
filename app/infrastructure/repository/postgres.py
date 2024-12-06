@@ -20,9 +20,11 @@ class PostgreSQLBatchRepository(BaseBatchRepository):
     def get_batches(self) -> Iterable[Batch]:
         with Session(engine) as session:
             query = select(Batch)
-            batch_data: dict = session.scalar(query)
-            batch: Batch = convert_batch_data_to_entity(batch_data)
-            return batch
+            batches_data: dict = session.scalar(query)
+            batches: list[Batch] = [
+                convert_batch_data_to_entity(batch_data) for batch_data in batches_data
+            ]
+            return batches
 
     def get_batch(self, reference: str) -> Batch:
         with Session(engine) as session:

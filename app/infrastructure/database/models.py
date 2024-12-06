@@ -64,5 +64,4 @@ def start_mappers():
 
 metadata.create_all(engine)
 
-# Опционально: вызов мапперов (если нужно использовать ORM)
 start_mappers()

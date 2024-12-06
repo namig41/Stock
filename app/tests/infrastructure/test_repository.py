@@ -18,3 +18,6 @@ def test_memory_repository_add_batches(container: Container):
     assert len(batch_repository) == 2
     assert batch1 == batch_repository.get_batch(batch1.reference)
     assert batch2 == batch_repository.get_batch(batch2.reference)
+
+
+def test_postgres_repository_add_batches(container: Container): ...
