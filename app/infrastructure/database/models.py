@@ -1,7 +1,7 @@
-from infrastructure.database.init import engine
 from sqlalchemy import (
     Column,
     Date,
+    Engine,
     ForeignKey,
     Integer,
     MetaData,
@@ -62,6 +62,6 @@ def start_mappers():
     )
 
 
-metadata.create_all(engine)
-
-start_mappers()
+def create_database(engine: Engine):
+    metadata.create_all(engine)
+    start_mappers()

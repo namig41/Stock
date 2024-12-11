@@ -8,9 +8,9 @@ from application.api.batch.handlers import router as batch_router
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="dddpy",
+        title="StockAPI",
         docs_url="/api/docs",
-        description="dddpy",
+        description="API для работы с продуктом",
         debug=True,
     )
 

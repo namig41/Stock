@@ -4,7 +4,7 @@ from dataclasses import (
 )
 from typing import Iterable
 
-from infrastructure.exceptions.repository import BatchNotFoundInDataBase
+from infrastructure.exceptions.repository import BatchNotFoundInDataException
 from infrastructure.repository.base import BaseBatchRepository
 
 from domain.entities.batch import Batch
@@ -28,7 +28,7 @@ class MemoryBatchRepository(BaseBatchRepository):
                 batch for batch in self._saved_batches if batch.reference == reference
             )
         except StopIteration:
-            raise BatchNotFoundInDataBase()
+            raise BatchNotFoundInDataException()
 
     def __len__(self):
         return len(self._saved_batches)
