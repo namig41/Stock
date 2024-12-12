@@ -1,36 +1,33 @@
-from dataclasses import (
-    dataclass,
-    field,
-)
+from dataclasses import dataclass
+from typing import Callable
 
-from infrastructure.database.init import engine
 from infrastructure.repository.base import BaseBatchRepository
-from infrastructure.repository.postgres import PostgreSQLBatchRepository
 from infrastructure.uow.base import BaseUnitOfWork
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Engine
+from sqlalchemy.orm import Session
 
 
 @dataclass
-class SqlAlchemyUnitOfWork(BaseUnitOfWork):
-
-    batches_repository: BaseBatchRepository = field(
-        default_factory=lambda: PostgreSQLBatchRepository(),
-    )
-    session_factory: sessionmaker = field(
-        default_factory=lambda: sessionmaker(bind=engine),
-    )
+class UnitOfWork(BaseUnitOfWork):
+    engine: Engine
+    batch_repository_factory: Callable[[Session], BaseBatchRepository]
 
     def __enter__(self):
-        self.session = self.session_factory()
-        self.batches = PostgreSQLBatchRepository()
-        return super().__enter__()
+        self.session = Session(self.engine)
+        self.batch_repository = self.batch_repository_factory(self.session)
+        return self
 
-    def __exit__(self, *args):
-        super().__exit__(*args)
+    def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type:
+            self.session.rollback()
+        else:
+            self.session.commit()
         self.session.close()
 
     def commit(self):
-        self.session.commit()
+        if self.session:
+            self.session.commit()
 
     def rollback(self):
-        self.session.rollback()
+        if self.session:
+            self.session.rollback()

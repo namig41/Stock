@@ -1,5 +1,4 @@
 from infrastructure.exceptions.repository import BatchNotFoundInDataException
-from infrastructure.logger.base import ILogger
 from sqlalchemy import (
     create_engine,
     Engine,
@@ -16,16 +15,15 @@ DB_ADDRESS: str = config.DB_ADDRESS
 DB_NAME: str = config.DB_NAME
 
 
-def init_database(logger: ILogger) -> Engine:
+def init_database() -> Engine:
     engine = create_engine(
         f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_ADDRESS}/{DB_NAME}",
     )
 
     try:
         with engine.connect():
-            logger.info("Успешное подключение к базе данных")
+            ...
     except SQLAlchemyError:
-        logger.error("Ошибка подключения к базе данных")
         raise BatchNotFoundInDataException()
     return engine
 

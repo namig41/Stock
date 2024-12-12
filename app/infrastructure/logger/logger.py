@@ -4,11 +4,11 @@ from dataclasses import dataclass
 from functools import lru_cache
 from typing import TextIO
 
-from infrastructure.logger.base import ILogger
+from infrastructure.logger.base import BaseLogger
 
 
 @dataclass
-class Logger:
+class Logger(BaseLogger):
 
     logger: logging.Logger
     error_logger: logging.Logger
@@ -42,7 +42,7 @@ def logger_factory(name: str, level: int, stream: TextIO) -> logging.Logger:
 
 
 @lru_cache
-def create_logger_dependency() -> ILogger:
+def create_logger_dependency() -> BaseLogger:
     common_logger: logging.Logger = logger_factory(
         name="common",
         level=logging.INFO,

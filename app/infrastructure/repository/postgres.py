@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from typing import Iterable
 
-from infrastructure.database.init import engine
 from infrastructure.repository.base import BaseBatchRepository
-from infrastructure.repository.converter import convert_batch_data_to_entity
-from sqlalchemy import select
+from sqlalchemy import (
+    Engine,
+    select,
+)
 from sqlalchemy.orm import Session
 
 from domain.entities.batch import Batch
@@ -12,23 +13,26 @@ from domain.entities.batch import Batch
 
 @dataclass
 class PostgreSQLBatchRepository(BaseBatchRepository):
+
+    engine: Engine
+
     def add_batch(self, batch: Batch):
-        with Session(engine) as session:
+        with Session(self.engine) as session:
             session.add(batch)
             session.commit()
 
     def get_batches(self) -> Iterable[Batch]:
-        with Session(engine) as session:
+        with Session(self.engine) as session:
             query = select(Batch)
-            batches_data: dict = session.scalar(query)
-            batches: list[Batch] = [
-                convert_batch_data_to_entity(batch_data) for batch_data in batches_data
-            ]
+            batches: Iterable[Batch] = session.scalars(query).all()
             return batches
 
     def get_batch(self, reference: str) -> Batch:
-        with Session(engine) as session:
+        with Session(self.engine) as session:
             query = select(Batch).where(Batch.reference == reference)
-            batch_data: dict = session.scalar(query)
-            batch: Batch = convert_batch_data_to_entity(batch_data)
+            batch: Batch = session.execute(query).scalar_one_or_none()
+
+            if not batch:
+                raise ValueError(f"Batch with reference {reference} not found")
+
             return batch

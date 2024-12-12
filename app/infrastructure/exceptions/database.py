@@ -4,7 +4,7 @@ from infrastructure.exceptions.base import InfrastuctureException
 
 
 @dataclass
-class ConnectionErrorTODataBaseException(InfrastuctureException):
+class ConnectionErrorToDataBaseException(InfrastuctureException):
     @property
     def message(self):
         return "Ошибка подключения к базе данных"

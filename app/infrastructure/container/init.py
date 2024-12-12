@@ -1,10 +1,10 @@
 from functools import lru_cache
 
 from infrastructure.database.init import init_database
-from infrastructure.logger.base import ILogger
+from infrastructure.logger.base import BaseLogger
 from infrastructure.logger.logger import create_logger_dependency
 from infrastructure.repository.base import BaseBatchRepository
-from infrastructure.repository.memory import MemoryBatchRepository
+from infrastructure.repository.postgres import PostgreSQLBatchRepository
 from punq import (
     Container,
     Scope,
@@ -18,23 +18,26 @@ def init_container() -> Container:
 
 
 def _init_container() -> Container:
-    container: Container = Container()
+    container = Container()
 
+    # Регистрируем логгер
     container.register(
-        ILogger,
+        BaseLogger,
         factory=create_logger_dependency,
         scope=Scope.singleton,
     )
 
-    container.register(
-        BaseBatchRepository,
-        MemoryBatchRepository,
-        scope=Scope.singleton,
-    )
-
+    # Регистрируем движок БД
     container.register(
         Engine,
         factory=init_database,
+        scope=Scope.singleton,
+    )
+
+    # Регистрируем репозиторий
+    container.register(
+        BaseBatchRepository,
+        PostgreSQLBatchRepository,
         scope=Scope.singleton,
     )
 
